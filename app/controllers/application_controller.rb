@@ -6,6 +6,8 @@ class ApplicationController < Sinatra::Base
   configure do
     set :public_folder, 'public'
     set :views, 'app/views'
+   
+
   end
 
   get '/' do #index
@@ -21,6 +23,7 @@ class ApplicationController < Sinatra::Base
     content = params[:content]
     article = Article.create(title: title, content: content)
     redirect "/articles/#{article.id}"
+    #conformation that this was created
   end
 
   get '/articles' do 
@@ -38,10 +41,16 @@ class ApplicationController < Sinatra::Base
 
   
   get '/articles/:id/edit' do
-
+    @article = Article.find(params[:id])
     erb :edit
   end
 
-  
+  patch "/articles/:id" do
+    article = Article.find(params[:id])
+    title = params[:title]
+    content = params[:content]
+    article.update(title: title, content: content)
+    redirect  "/articles/#{article.id}"
+  end
 
 end
